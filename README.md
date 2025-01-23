@@ -40,3 +40,31 @@ node index.js
 // serve html file
 start index.html
 ```
+
+### [Short Polling](./polling)
+
+Imagine a client has requested for a long running task to be executed but the server never responds immediately so the client has to wait till the whole process is completed an acknowledgement is received. What if our server decides to assign a unique task ID to the client and ask it periodically send check the status of the task? This allows the client to perform other duties while knowing that their request is being processed.
+
+A short polling approach is demonstrated below.
+
+1. Start the server
+
+    ```bash
+    cd short-polling
+
+    node index.js
+    ```
+
+2. Submit request to create new task
+
+    ```bash
+    curl -X POST http://localhost:8000/submit
+    ```
+
+3. Check status of job
+
+    ```bash
+    # run this request after every 2 seconds
+
+    curl http://localhost:8000/check-status?jobId=<replace-with-job-id-from-previous-request>
+    ```
