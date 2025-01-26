@@ -68,3 +68,46 @@ A short polling approach is demonstrated below.
 
     curl http://localhost:8000/check-status?jobId=<replace-with-job-id-from-previous-request>
     ```
+
+### [Long Polling](./long-polling)
+
+This model relies on a "local polling" on the server by periodically checking if a requested task is complete before replying to the client. The connection is kept open until a resource is available for the server to send back or a timeout has occurred.
+Since the backend does a local short polling while the connection is still open, long polling is not preferred for a single-threaded synchronous server as the request may block the main thread and prevent other tasks from being executed.
+
+A long polling approach is demonstrated below
+
+1. Start the server
+
+    ```bash
+    cd long-polling
+
+    node index.js
+    ```
+
+2. Submit request to create new task
+
+    ```bash
+    curl -X POST http://localhost:8000/submit
+    ```
+
+3. Check status of job
+
+    ```bash
+    # request is opened until the job is completed
+
+    curl http://localhost:8000/check-status?jobId=<replace-with-job-id-from-previous-request>
+    ```
+
+### [Server Sent Events](./long-polling)
+
+SSE, aka ""unidirectional websockets", lol, allows a server to stream responses to a client without closing the connection. The connection stays open until it is closed by either party. Unlike websockets, SSE is unidirectional and allows only the server to send the events down to the clients.
+
+Start an SSE server below
+
+```bash
+cd sse
+
+node index.js
+```
+
+### [Publish - Subscribe](./pub-sub)
